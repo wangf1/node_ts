@@ -2,12 +2,30 @@ Small practice project for TypeScript and Node.js, in order to prepare for TypeS
 
 ---
 
-### How to Run
+# How to Run
+
+## Get MongoDB instance
+
+For example, get free MongoDB instance from MongoDB Atlas, or create docker container with MongoDB.
+
+## Put MongoDB URL in `.env`
+
+Create `.env` file in root directory, add the following content:
+
+For example:
+
+```
+MONGO_URL=mongodb+srv://<username>:<password>@cluster0.lk7fdpe.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+```
+
+## Start
 
 ```bash
 npm install
 npm start
 ```
+
+## Test
 
 ### Create User
 
