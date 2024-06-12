@@ -6,13 +6,7 @@ import compression from 'compression';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import router from './router';
-
-import * as dotenv from 'dotenv'; // Import dotenv
-
-dotenv.config();
-
-const dbPassword = process.env.DB_PASSWORD;
-
+import dotenv from 'dotenv';
 
 const app = express();
 
@@ -29,10 +23,14 @@ server.listen(8080, () => {
     console.log('Server started on port 8080');
 });
 
-const MONGO_URL = 'mongodb+srv://armstrongwang2000:L2nPoCIyY5I1zA6x@cluster0.lk7fdpe.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
+
+dotenv.config();
 
 mongoose.Promise = global.Promise;
-mongoose.connect(MONGO_URL);
+if (process.env.MONGO_URL === undefined) {
+    throw new Error('MONGO_URL is not defined');
+}
+mongoose.connect(process.env.MONGO_URL);
 mongoose.connection.once('error', (err) => {
     console.error('MongoDB connection error: ', err);
 });
