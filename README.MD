@@ -59,6 +59,21 @@ The token `5a9b42a36f0cf65ca85b083dd49261f0b75953fb3cbfbc964ed9351d3f4cca3f` can
 curl -X GET http://localhost:8080/users --cookie "token=5a9b42a36f0cf65ca85b083dd49261f0b75953fb3cbfbc964ed9351d3f4cca3f"
 ```
 
+### Update User
+
+The user ID `6669336de3835870124b4f3e` can be found in the List User response. The token `5a9b42a36f0cf65ca85b083dd49261f0b75953fb3cbfbc964ed9351d3f4cca3f` can be found in the Login response.
+
+```bash
+curl -X PATCH http://localhost:8080/users/6669336de3835870124b4f3e \
+-H "Content-Type: application/json" \
+--cookie "token=5a9b42a36f0cf65ca85b083dd49261f0b75953fb3cbfbc964ed9351d3f4cca3f" \
+-d '{
+    "username":"Jack_updated1",
+    "password": "123_updated"
+}'
+
+```
+
 ### Delete User
 
 The user ID `6669336de3835870124b4f3e` can be found in the List User response. The token `5a9b42a36f0cf65ca85b083dd49261f0b75953fb3cbfbc964ed9351d3f4cca3f` can be found in the Login response.

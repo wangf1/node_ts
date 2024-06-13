@@ -1,6 +1,12 @@
 import express from "express";
-import { deleteUserById, getUsers, updateUserById } from "../db/users";
+import {
+  deleteUserById,
+  getUserById,
+  getUsers,
+  updateUserById,
+} from "../db/users";
 import { authentication, random } from "../helpers";
+import User from "../types/User";
 
 export const getAllUsers = async (
   req: express.Request,
@@ -39,16 +45,34 @@ export const updateUser = async (
       return res.status(400).send("Please specify username and/or password.");
     }
 
-    const salt = random();
+    const user = (await getUserById(req.params.id).select(
+      "+authentication.salt +authentication.password"
+    )) as User;
 
+    const newUserName: string | null =
+      username !== user.username ? username : null;
+
+    const expectedHash = authentication(user.authentication.salt, password);
+    let newPassword: string | null = null;
+    if (user.authentication.password !== expectedHash) {
+      newPassword = password;
+    }
+
+    if (!newUserName && !newPassword) {
+      return res
+        .status(400)
+        .send("Please specify updated username and/or password to update.");
+    }
+
+    const salt = random();
     const values = {
-      ...(username && { username }),
-      ...(password && {
-        authentication: { salt, password: authentication(salt, password) },
+      ...(newUserName && { username }),
+      ...(newPassword && {
+        authentication: { salt, password: authentication(salt, newPassword) },
       }),
     };
 
-    const user = await updateUserById(req.params.id, values);
+    const updatedUser = await updateUserById(req.params.id, values);
 
     return res.status(200).json(user);
   } catch (err) {
